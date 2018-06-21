@@ -20,6 +20,13 @@ container_count = len(containers)
 
 contain = containers[0]
 
+filename = "products.csv"
+f = open(filename,"w")
+
+headers = "name; price\n"
+
+f.write(headers)
+
 
 
 for c in range (0,container_count):
@@ -31,6 +38,6 @@ for c in range (0,container_count):
     for imgage in description:
         des = imgage['alt']
     print(des + "  " + price + "€")
+    f.write(des + ";" + price + "\n")
 
-
-
+f.close
