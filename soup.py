@@ -19,7 +19,6 @@ containers = page_soup.find_all("div",{"class":"productWrapper"})
 container_count = len(containers)
 
 contain = containers[0]
-price = contain.find_all("div",{"class":"price orange"})
 
 
 
@@ -27,6 +26,11 @@ for c in range (0,container_count):
     res = containers[c].find_all("div",{"class":"price orange"})
     res2 = re.split('\s+', str(res))
     if len(res2)>1:
-        #print(res2)
-        #print(len(res2))
-        print(res2[6])
+        price = res2[6]
+    description = containers[c].find_all("img",{"class":"lazyload"})
+    for imgage in description:
+        des = imgage['alt']
+    print(des + "  " + price + "€")
+
+
+
