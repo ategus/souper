@@ -14,25 +14,19 @@ page_soup = soup(page_html, "html.parser")
 
 #grab container
 containers = page_soup.find_all("div",{"class":"productWrapper"})
-#containers = page_soup.find_all("article")
+
 
 container_count = len(containers)
 
 contain = containers[0]
 price = contain.find_all("div",{"class":"price orange"})
-#price = contain.find_all("span")
-
-price
-
-result = re.split('\s+', str(price))
 
 
-print (result[6])
-#print(containers)
-#print(contain)
 
-#print (container_count)
-
-#logging.info(contain)
-#print (containers[0]    )
-#print(result)
+for c in range (0,container_count):
+    res = containers[c].find_all("div",{"class":"price orange"})
+    res2 = re.split('\s+', str(res))
+    if len(res2)>1:
+        #print(res2)
+        #print(len(res2))
+        print(res2[6])
