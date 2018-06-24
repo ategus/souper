@@ -1,0 +1,7 @@
+[DEFAULT]
+
+[login]
+myurl1 = https://thisismyurl.com
+myurl = https://thisismyurl.com
+user = username
+passwd = passwd
