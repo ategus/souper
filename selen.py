@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup as soup
 import re
 import pandas as pd
 import sys
+import csv
 
 
 browser = webdriver.Chrome()
@@ -21,6 +22,9 @@ browser = webdriver.Chrome()
 
 config = configparser.ConfigParser()
 config.read('souperssl.cfg')
+
+
+'''
 
 user = config['login']['user']
 passwd = config['login']['passwd']
@@ -38,29 +42,83 @@ element_pass.send_keys(passwd)
 element_send.click()
 
 
-#element_Kunden = WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.LINK_TEXT, 'Kunden')))
 
-time.sleep(13)
+time.sleep(20)
 
-soup_level1=soup(browser.page_source, 'lxml')
+
 
 
 browser.find_element_by_link_text("Kunden").click()
-time.sleep(1)
+time.sleep(2)
 #suchen
 browser.find_element_by_id("s_2_1_42_0_Ctrl").click()
-time.sleep(1)
+time.sleep(2)
 #show more results
 browser.find_element_by_id("s_1_1_4_0_mb").click()
-time.sleep(1)
+time.sleep(2)
+'''
+
+
+#get html source
+#data = open("page.html")
+#data.read()
+#print(data)
+#soup_level1=soup(data, 'lxml')
+
+browser.get("file:///home/rox/github/souper/page.html")
+
+soup_level1=soup(browser.page_source,"lxml")
+#print (soup_level1)
+#table = soup.findAll('table', attrs={ "id" : "s_1_l"})
+#table = soup_level1.select('#s_1_l')
+tables = soup_level1.find('table',id="s_1_l")
+
+
+
+
+csvout  = csv.writer(sys.stdout)
+
+for table in tables:
+    print ('#')
+    print ('# Table')
+    print ('# Fields: ' + ','.join([tr.text for tr in table.findAll('th')]))
+    
+    for row in table.findAll('tr'):
+        csvout.writerow([tr.text for tr in row.findAll('td')])
+    print
+
+
+'''
+
+headers = [header.text for header in table.find_all('th')]
+#print(header)
+
+headers = [header.text for header in table.find_all('th')]
+print(headers)
+
+rows = []
+for row in table.find_all('tr'):
+
+    rows.append([val.text.encode('utf8') for val in row.find_all('td')])
+
+
+with open('output_file.csv', 'wb') as f:
+    
+    writer = csv.writer(f)
+    writer.writerow(headers)
+    writer.writerow(row for row in rows if row)
+'''
+
 
 #next
 
+
+'''
 for a in range (45):
     browser.find_element_by_id("last_pager_s_1_l").click()
     #WebDriverWait(browser,10,poll_frequency=0.5).until(EC.element_to_be_clickable((By.ID, 'last_pager_s_1_l'))).click()
     time.sleep(2)
-
+'''
             
 
 
@@ -83,4 +141,4 @@ print(data)
 
 
 
-#browser.quit()
+browser.quit()
