@@ -24,7 +24,7 @@ config = configparser.ConfigParser()
 config.read('souperssl.cfg')
 
 
-'''
+
 
 user = config['login']['user']
 passwd = config['login']['passwd']
@@ -56,37 +56,41 @@ time.sleep(2)
 #show more results
 browser.find_element_by_id("s_1_1_4_0_mb").click()
 time.sleep(2)
-'''
-
-
-#get html source
-#data = open("page.html")
-#data.read()
-#print(data)
-#soup_level1=soup(data, 'lxml')
-
-browser.get("file:///home/rox/github/souper/page.html")
-
-soup_level1=soup(browser.page_source,"lxml")
-#print (soup_level1)
-#table = soup.findAll('table', attrs={ "id" : "s_1_l"})
-#table = soup_level1.select('#s_1_l')
-tables = soup_level1.find('table',id="s_1_l")
 
 
 
 
-csvout  = csv.writer(sys.stdout)
+#test for local html
+#browser.get("file:///home/rox/github/souper/page.html")
 
-for table in tables:
-    print ('#')
-    print ('# Table')
-    print ('# Fields: ' + ','.join([tr.text for tr in table.findAll('th')]))
-    
-    for row in table.findAll('tr'):
-        csvout.writerow([tr.text for tr in row.findAll('td')])
-    print
+#soup_level1=soup(browser.page_source,"lxml")
+#tables = soup_level1.find('table',id="s_1_l")
 
+
+f = open('output.csv','w')
+
+#csvout  = csv.writer(sys.stdout)
+csvout = csv.writer(f)
+
+#next
+
+
+
+for a in range (100):
+    browser.find_element_by_id("last_pager_s_1_l").click()
+    #WebDriverWait(browser,10,poll_frequency=0.5).until(EC.element_to_be_clickable((By.ID, 'last_pager_s_1_l'))).click()
+
+    soup_level1=soup(browser.page_source,"lxml")
+    tables = soup_level1.find('table',id="s_1_l")
+    for table in tables:
+        for row in table.findAll('tr'):
+            csvout.writerow([tr.text for tr in row.findAll('td')])
+
+    time.sleep(2)
+
+            
+
+#browser.quit()
 
 '''
 
@@ -108,37 +112,3 @@ with open('output_file.csv', 'wb') as f:
     writer.writerow(headers)
     writer.writerow(row for row in rows if row)
 '''
-
-
-#next
-
-
-'''
-for a in range (45):
-    browser.find_element_by_id("last_pager_s_1_l").click()
-    #WebDriverWait(browser,10,poll_frequency=0.5).until(EC.element_to_be_clickable((By.ID, 'last_pager_s_1_l'))).click()
-    time.sleep(2)
-'''
-            
-
-
-
-'''
-data = []
-for tr in browser.find_element_by_id('s_1_l'):
-    tds = tr.find_element_by_id('td')
-    if tds: 
-        data.append([td.text for td in tds])
-print(data)
-'''
-
-#print (browser.page_source)
-#table = soup_level1.find_all('table')[0]
-
-#print(table)
-
-
-
-
-
-browser.quit()
